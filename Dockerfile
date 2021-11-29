@@ -75,6 +75,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 # store pid of guix-daemon to wait for it
 pid=$!
+echo pid of daemon is $pid
 # update guix using substitutes
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<SCRIPT
     . $GUIX_PROFILE/etc/profile
@@ -83,6 +84,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 kill $(pgrep guix-daemon)
 wait $pid
+echo daemon terminated
 SETUP
 
 # store the entrypoint using root
@@ -91,7 +93,7 @@ USER root
 # entrypoint: 
 # 1) start guix-daemon in the background
 # 2) build and export the requested package
-COPY <<"RUN" /usr/bin/entrypoint.sh
+COPY <<"ENTRY" /usr/bin/entrypoint.sh
 #!/bin/bash
 set -e
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<'SCRIPT' &
@@ -101,6 +103,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 # store pid of guix-daemon to wait for it
 pid=$!
+echo pid of daemon is $pid
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<SCRIPT
     . $GUIX_PROFILE/etc/profile
     PATH=$PATH:$GUIX_PROFILE/bin
@@ -108,7 +111,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 kill $(pgrep guix-daemon)
 wait $pid
-RUN
+ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
 
