@@ -79,6 +79,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
     echo guix pull done
 SCRIPT
+echo killing daemon
 kill $pid
 wait $pid
 SETUP
