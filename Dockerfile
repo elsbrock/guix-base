@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3-labs
-FROM debian
+FROM debian AS debug_hook
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # contains /var, /etc and the /gnu store
 RUN <<INSTALL
 set -e
-apt-get update && apt-get install -y wget locales gpg xz-utils less netbase bash
+apt-get update && apt-get install -y wget locales gpg xz-utils less netbase bash procps
 rm -rf /var/lib/apt/lists/*
 localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 useradd -ms /bin/bash guix
@@ -21,7 +21,8 @@ ENV GUIX_VERSION v1.3.0
 ENV LANG en_US.utf8
 
 # these guix profile variables are only valid within a proot
-ENV GUIX_PROFILE "/home/guix/.config/guix/current"
+ENV GUIX_PROFILE /home/guix/.config/guix/current
+ENV GUIX_LOCPATH /var/guix/profiles/per-user/root/guix-profile/lib/locale
 ENV _GUIX_PROFILE $GUIX_PROFILE
 ENV PATH $PATH:$GUIX_PROFILE/bin
 
@@ -58,6 +59,8 @@ cat <<EOF > ~/.config/guix/channels.scm
 EOF
 BOOTSTRAP
 
+FROM debug_hook
+
 # setup guix
 # 1) start guix-daemon in the background
 # 2) authorize build server and update the system
@@ -77,9 +80,8 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     . $GUIX_PROFILE/etc/profile
     PATH=$PATH:$GUIX_PROFILE/bin
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
-    echo guix pull done
 SCRIPT
-kill $pid
+kill $(pgrep guix-daemon)
 wait $pid
 SETUP
 
@@ -104,7 +106,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     PATH=$PATH:$GUIX_PROFILE/bin
     guix build $@ && guix pack --format=docker --entry-point=bin/tor --root=pack.tgz $@
 SCRIPT
-kill $pid
+kill $(pgrep guix-daemon)
 wait $pid
 RUN
 
