@@ -83,8 +83,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
 SCRIPT
 kill $(pgrep guix-daemon)
-wait $pid
-echo daemon terminated
+wait $pid || true
 SETUP
 
 # store the entrypoint using root
@@ -110,7 +109,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     guix build $@ && guix pack --format=docker --entry-point=bin/tor --root=pack.tgz $@
 SCRIPT
 kill $(pgrep guix-daemon)
-wait $pid
+wait $pid || true
 ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
