@@ -72,6 +72,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 # store pid of guix-daemon to wait for it
 pid=$!
+echo pid of daemon is $pid
 # update guix using substitutes
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<SCRIPT
     . $GUIX_PROFILE/etc/profile
@@ -81,7 +82,9 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 echo killing daemon
 kill $pid
+echo daemon killed
 wait $pid
+echo daemon terminated
 SETUP
 
 # store the entrypoint using root
@@ -100,13 +103,17 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 # store pid of guix-daemon to wait for it
 pid=$!
+echo pid of daemon is $pid
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<SCRIPT
     . $GUIX_PROFILE/etc/profile
     PATH=$PATH:$GUIX_PROFILE/bin
     guix build $@ && guix pack --format=docker --entry-point=bin/tor --root=pack.tgz $@
 SCRIPT
+echo killing daemon
 kill $pid
+echo daemon killed
 wait $pid
+echo daemon terminated
 ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
