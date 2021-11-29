@@ -90,7 +90,7 @@ USER root
 # entrypoint: 
 # 1) start guix-daemon in the background
 # 2) build and export the requested package
-COPY <<"RUN" /usr/bin/entrypoint.sh
+COPY <<"ENTRY" /usr/bin/entrypoint.sh
 #!/bin/bash
 set -e
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<'SCRIPT' &
@@ -107,7 +107,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
 SCRIPT
 kill $pid
 wait $pid
-RUN
+ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
 
