@@ -78,11 +78,10 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     . $GUIX_PROFILE/etc/profile
     PATH=$PATH:$GUIX_PROFILE/bin
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
-    echo guix pull done
 SCRIPT
 echo killing daemon
 echo $pid
-kill -9 $pid
+kill -TERM $pid
 echo daemon killed
 wait $pid
 echo daemon terminated
@@ -111,7 +110,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     guix build $@ && guix pack --format=docker --entry-point=bin/tor --root=pack.tgz $@
 SCRIPT
 echo killing daemon
-kill $pid
+kill -TERM $pid
 echo daemon killed
 wait $pid
 echo daemon terminated
