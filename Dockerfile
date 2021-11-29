@@ -81,7 +81,8 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     echo guix pull done
 SCRIPT
 echo killing daemon
-kill $pid
+echo $pid
+kill -9 $pid
 echo daemon killed
 wait $pid
 echo daemon terminated
