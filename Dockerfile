@@ -77,6 +77,7 @@ proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix s
     . $GUIX_PROFILE/etc/profile
     PATH=$PATH:$GUIX_PROFILE/bin
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
+    echo guix pull done
 SCRIPT
 kill $pid
 wait $pid
@@ -94,7 +95,7 @@ set -e
 proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<'SCRIPT' &
     . $GUIX_PROFILE/etc/profile
     PATH=$PATH:$GUIX_PROFILE/bin
-    guix-daemon --disable-chroot --substitute-urls='https://ci.guix.gnu.org'
+    guix-daemon --disable-chroot
 SCRIPT
 # store pid of guix-daemon to wait for it
 pid=$!
