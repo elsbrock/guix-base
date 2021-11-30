@@ -6,7 +6,7 @@ This Docker image provides a non-root GNU Guix installation that can be used to 
 
 The original motivation for this image was to identify a way to build reproducible Docker images. If you think it through, building reproducible images is kind of hard, because only few package maintainers publish Docker images, much less reproducible ones – instead, you typically use a general purpose Docker base image (such as `debian`) to install a binary or compile your package from source. This leads to a lot of externalities introduced and typically means that no exact image reproduction can be built locally.
 
-Recently I happened to learn about and became interested in modern package managers such as Nix, or GNU Guix. Instead, you can use Guix (and this image) to produce perfectly reproducible images.
+Recently I happened to learn about and became interested in modern package managers such as Nix, or GNU Guix. I learned that you can use Guix to produce perfectly reproducible Docker images, and I wanted to be able to use it for [elsbrock/tor-node](https://github.com/elsbrock/tor-node). So, this is what I came up with.
 
 As soon as the container is started, `guix-daemon` is started in the background. All processes are started under the `guix` user, ie. no `--privileged` container or generally `root` is required.
 
