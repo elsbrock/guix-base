@@ -1,8 +1,8 @@
 # (Unofficial) Guix Base Docker Image
 
-**An  *unofficial* Docker image with GNU Guix installed**
+**An  *unofficial* Docker image with a ready-to-use GNU Guix installation**
 
-This Docker image provides a non-root GNU Guix installation that can be used to execute arbitrary (but probably not all) `guix` commands.
+This Docker image provides a non-root GNU Guix installation that can be used to execute arbitrary (but probably not all) `guix` commands (see limitations).
 
 The original motivation for this image was to identify a way to build reproducible Docker images. If you think it through, building reproducible images is kind of hard, because only few package maintainers publish Docker images, much less reproducible ones – instead, you typically use a general purpose Docker base image (such as `debian`) to install a binary or compile your package from source. This leads to a lot of externalities introduced and typically means that no exact image reproduction can be built locally.
 
@@ -39,6 +39,15 @@ Guix takes that a step further by additionally supporting stateless, reproducibl
 
 _https://guix.gnu.org/en/about/_
 </blockquote>
+
+## Internals
+
+The image is configured to run as the `guix` user (with UUID 1000) by default. Guix is installed into the user's home directory (ie. `/home/guix`, containing `var` and the `gnu` blob store). Any Guix process is executed via `proot` with the aforementioned directories bind-mounted to `/`.
+
+## Limitations
+
+* We are running the Guix daemon in the background in the same shell as the entrypoint. I'm not sure this is a good idea and maybe a proper init system should be used.
+* All processes are executed using `proot` – this will most likely break certain commands
 
 ## Resources
 
