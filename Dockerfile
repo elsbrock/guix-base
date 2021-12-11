@@ -58,7 +58,6 @@ cat <<EOF > ~/.config/guix/channels.scm
             chan))
     %default-channels)
 EOF
-guix describe -f channels
 BOOTSTRAP
 
 FROM debug_hook
@@ -73,6 +72,7 @@ exec proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/g
     . $GUIX_PROFILE/etc/profile
     guix-daemon --disable-chroot &
     pid=$!
+    guix describe -f channels
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
     kill $pid && wait $pid
 SCRIPT
