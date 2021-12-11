@@ -11,5 +11,5 @@
         "automerge": true,
         "matchPaths": ["Dockerfile"]
       }
-  ],
+  ]
 }
