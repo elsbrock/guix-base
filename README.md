@@ -15,7 +15,7 @@ As soon as the container is started, `guix-daemon` is started in the background.
 By default (without entrypoint override) the container will execute `guix build && guix pack` of the provided package name. The name must be a valid Guix package name (see [Packages](https://guix.gnu.org/en/packages/)).
 
 ```sh
-docker run --rm -it ghcr.io/elsbrock/guix-base tor
+docker run --rm ghcr.io/elsbrock/guix-base --entry-point=bin/tor tor | docker import -t guix-base/tor -
 ```
 
 ## About GNU Guix
@@ -36,13 +36,15 @@ Guix System is an advanced distribution of the GNU operating system. It uses the
 GNU Guix provides state-of-the-art package management features such as transactional upgrades and roll-backs, reproducible build environments, unprivileged package management, and per-user profiles. It uses low-level mechanisms from the Nix package manager, but packages are defined as native Guile modules, using extensions to the Scheme language—which makes it nicely hackable.
 
 Guix takes that a step further by additionally supporting stateless, reproducible operating system configurations. This time the whole system is hackable in Scheme, from the initial RAM disk to the initialization system, and to the system services.
+</blockquote>
 
 _https://guix.gnu.org/en/about/_
-</blockquote>
 
 ## Internals
 
 The image is configured to run as the `guix` user (with UUID 1000) by default. Guix is installed into the user's home directory (ie. `/home/guix`, containing `var` and the `gnu` blob store). Any Guix process is executed via `proot` with the aforementioned directories bind-mounted to `/`.
+
+To reduce the load on the Guix savannah git server the [Github mirror](https://github.com/guix-mirror/guix.git) is used. Substitutes are still obtained via the official CI server (not sure if there's another alternative other than building it from source).
 
 ## Limitations
 

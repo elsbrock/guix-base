@@ -66,42 +66,36 @@ FROM debug_hook
 # 2) authorize build server and update the system
 RUN <<SETUP
 #!/bin/bash
-set -e
 # start guix daemon in the background
-proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<'SCRIPT'
+exec proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<'SCRIPT'
     . $GUIX_PROFILE/etc/profile
-    PATH=$PATH:$GUIX_PROFILE/bin
     guix-daemon --disable-chroot &
     pid=$!
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
-    kill $pid
-    wait $pid || true
+    kill $pid && wait $pid
 SCRIPT
 SETUP
 
 # store the entrypoint using root
+ENTRYPOINT ["proot", "-b guix/gnu:/gnu", "-b guix/var:/var", "-b /proc", "-b /dev", "-b guix/etc:/etc/guix", "/usr/bin/entrypoint.sh"]
 USER root
 
 # entrypoint: 
 # 1) start guix-daemon in the background
-# 2) build and export the requested package
+# 2) pack the requested package
 COPY <<"ENTRY" /usr/bin/entrypoint.sh
 #!/bin/bash
-set -e
-proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/guix sh <<'SCRIPT'
-    . $GUIX_PROFILE/etc/profile
-    PATH=$PATH:$GUIX_PROFILE/bin
-    guix-daemon --disable-chroot &
-    pid=$!
-    guix build $@ && guix pack --format=docker --entry-point=bin/tor --root=pack.tgz $@
-    ls -lha
-    kill $pid
-    wait $pid || true
-SCRIPT
+set -o pipefail
+exec 6>&1 1>&2
+. $GUIX_PROFILE/etc/profile
+guix-daemon --disable-chroot &
+pid=$!
+guix pack --format=docker --root=pack.tgz $@
+test -f pack.tgz && cat pack.tgz >&6
+kill $pid && wait $pid
 ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
 
 USER guix
 WORKDIR /home/guix
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
