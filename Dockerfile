@@ -58,6 +58,7 @@ cat <<EOF > ~/.config/guix/channels.scm
             chan))
     %default-channels)
 EOF
+guix describe -f channels
 BOOTSTRAP
 
 FROM debug_hook
