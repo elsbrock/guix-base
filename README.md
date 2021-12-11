@@ -18,7 +18,7 @@ By default (without entrypoint override) the container will execute `guix pack $
 docker run --rm ghcr.io/elsbrock/guix-base --entry-point=bin/tor tor | docker image load -
 ```
 
-This will import the image under the name `tor:latest`.
+This will import the image under the name `tor:latest`. Executing this command multiple times is guaranteed to result in the same Docker image – this is guaranteed by Guix. Isn't that cool?
 
 ## About GNU Guix
 
