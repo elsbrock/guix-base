@@ -15,8 +15,10 @@ As soon as the container is started, `guix-daemon` is started in the background.
 By default (without entrypoint override) the container will execute `guix pack $@` of the provided package name. The name must be a valid Guix package name (see [Packages](https://guix.gnu.org/en/packages/)).
 
 ```sh
-docker run --rm ghcr.io/elsbrock/guix-base --entry-point=bin/tor tor | docker import - guix-base/tor
+docker run --rm ghcr.io/elsbrock/guix-base --entry-point=bin/tor tor | docker image load -
 ```
+
+This will import the image under the name `tor:latest`.
 
 ## About GNU Guix
 
