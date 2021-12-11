@@ -17,6 +17,7 @@ chmod +x /usr/local/bin/proot
 INSTALL
 
 # set environment variables
+# renovate: datasource=github-tags depName=guix-mirror/guix
 ENV GUIX_VERSION v1.3.0
 ENV LANG en_US.utf8
 
