@@ -1,5 +1,15 @@
 {
   "extends": [
     "config:base"
-  ]
+  ],
+  "docker": {
+      "pinDigests": true,
+      "enabled": true
+  },
+  "packageRules": [
+      {
+        "automerge": true,
+        "matchPaths": ["Dockerfile"]
+      }
+  ],
 }
