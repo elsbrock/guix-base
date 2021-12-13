@@ -21,6 +21,11 @@ jobs:
         uses: docker/metadata-action@e5622373a38e60fb6d795a4421e56882f2d7a681
         with:
           images: ghcr.io/elsbrock/guix-base
+          tags: |
+            type=ref,event=branch,enable=${{ !endsWith(github.ref, github.event.repository.default_branch) }}
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+          flavor: |
+            latest=false
 
       - name: Build Docker image
         uses: docker/build-push-action@v2
