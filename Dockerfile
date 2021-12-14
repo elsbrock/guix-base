@@ -42,7 +42,7 @@ wget -q https://ftp.gnu.org/gnu/guix/guix-binary-${GUIX_VERSION/v/}.x86_64-linux
 wget -q "https://sv.gnu.org/people/viewgpg.php?user_id=127547" -qO - | gpg --import -
 gpg --verify guix-binary-${GUIX_VERSION/v/}.x86_64-linux.tar.xz.sig
 # unpack to ~/guix
-mkdir guix && tar --warning=no-timestamp -C guix -xf guix-binary-${GUIX_VERSION/v/}.x86_64-linux.tar.xz
+mkdir guix && tar --warning=no-timestamp -C guix -xf guix-binary-${GUIX_VERSION/v/}.x86_64-linux.tar.xz && rm guix-binary-${GUIX_VERSION/v/}.x86_64-linux.tar.xz
 # create additional dirs required to proot later
 mkdir -p .config/guix guix/etc
 # mark installation as current
