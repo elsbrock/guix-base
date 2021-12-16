@@ -9,7 +9,7 @@
   "packageRules": [
       {
         "automerge": true,
-        "matchPaths": ["Dockerfile"]
+        "matchPaths": ["Dockerfile", ".github/workflows/*.yml"]
       }
   ]
 }
