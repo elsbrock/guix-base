@@ -18,7 +18,7 @@ By default (without entrypoint override) the container will execute `guix pack $
 docker run --rm ghcr.io/elsbrock/guix-base --entry-point=bin/tor tor | docker image load -
 ```
 
-This will import the image under the name `tor:latest`. Executing this command multiple times is guaranteed to result in the same Docker image – this is guaranteed by Guix. Isn't that cool?
+This will import the image under the name `tor:latest`. Executing this command multiple times will result in the same Docker image – this is guaranteed by Guix. Isn't that cool?
 
 ## About GNU Guix
 
@@ -46,7 +46,7 @@ _https://guix.gnu.org/en/about/_
 
 The image is configured to run as the `guix` user (with UUID 1000) by default. Guix is installed into the user's home directory (ie. `/home/guix`, containing `var` and the `gnu` blob store). Any Guix process is executed via `proot` with the aforementioned directories bind-mounted to `/`.
 
-To reduce the load on the Guix savannah git server the [Github mirror](https://github.com/guix-mirror/guix.git) is used. Substitutes are still obtained via the official CI server (not sure if there's another alternative other than building it from source).
+To reduce the load on the Guix savannah git server the [Github mirror](https://github.com/guix-mirror/guix.git) is used. Substitutes are still obtained via the official CI server (not sure if there's another alternative other than building it from source – let me know).
 
 ## Limitations
 
