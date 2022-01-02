@@ -48,7 +48,7 @@ mkdir -p .config/guix guix/etc
 # mark installation as current
 ln -sf ~/guix/var/guix/profiles/per-user/root/current-guix ~/.config/guix/current
 # use github mirror instead of savannah
-COMMIT=$(git ls-remote -q git://github.com/guix-mirror/guix ${GUIX_VERSION} | awk '{print $1}')
+COMMIT=$(git ls-remote -q git://github.com/guix-mirror/guix ${GUIX_VERSION}^{} | awk '{print $1}')
 echo "commit is ${COMMIT}"
 cat <<EOF > ~/.config/guix/channels.scm
 (map (lambda (chan)
