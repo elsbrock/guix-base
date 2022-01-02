@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # contains /var, /etc and the /gnu store
 RUN <<INSTALL
 set -e
-apt-get update && apt-get install -y wget locales gpg xz-utils less netbase bash procps
+apt-get update && apt-get install -y wget locales gpg xz-utils less netbase bash procps git
 rm -rf /var/lib/apt/lists/*
 localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 useradd -ms /bin/bash guix
@@ -48,13 +48,14 @@ mkdir -p .config/guix guix/etc
 # mark installation as current
 ln -sf ~/guix/var/guix/profiles/per-user/root/current-guix ~/.config/guix/current
 # use github mirror instead of savannah
+COMMIT=$(git ls-remote -q git://github.com/guix-mirror/guix ${GUIX_VERSION}^{} | awk '{print $1}')
 cat <<EOF > ~/.config/guix/channels.scm
 (map (lambda (chan)
         (if (guix-channel? chan)
             (channel
             (inherit chan)
             (url "https://github.com/guix-mirror/guix.git")
-            (commit "a0178d34f582b50e9bdbb0403943129ae5b560ff"))
+            (commit "$COMMIT"))
             chan))
     %default-channels)
 EOF
