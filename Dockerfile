@@ -48,13 +48,14 @@ mkdir -p .config/guix guix/etc
 # mark installation as current
 ln -sf ~/guix/var/guix/profiles/per-user/root/current-guix ~/.config/guix/current
 # use github mirror instead of savannah
+VERSION=\$(git ls-remote -q git://github.com/guix-mirror/guix ${GUIX_VERSION} | awk '{print \$1}')
 cat <<EOF > ~/.config/guix/channels.scm
 (map (lambda (chan)
         (if (guix-channel? chan)
             (channel
             (inherit chan)
             (url "https://github.com/guix-mirror/guix.git")
-            (commit "a0178d34f582b50e9bdbb0403943129ae5b560ff"))
+            (commit ""))
             chan))
     %default-channels)
 EOF
