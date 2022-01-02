@@ -34,7 +34,7 @@ WORKDIR /home/guix
 # bootstrap guix
 RUN <<BOOTSTRAP
 #!/bin/bash
-set -ex
+set -e
 # fetch binaries containing guix-daemon and other guix commands
 echo wget -q https://ftp.gnu.org/gnu/guix/guix-binary-${GUIX_VERSION/v/}.x86_64-linux.tar.xz
 wget -q https://ftp.gnu.org/gnu/guix/guix-binary-${GUIX_VERSION/v/}.x86_64-linux.tar.xz
@@ -49,7 +49,6 @@ mkdir -p .config/guix guix/etc
 ln -sf ~/guix/var/guix/profiles/per-user/root/current-guix ~/.config/guix/current
 # use github mirror instead of savannah
 COMMIT=$(git ls-remote -q git://github.com/guix-mirror/guix ${GUIX_VERSION}^{} | awk '{print $1}')
-echo "commit is ${COMMIT}"
 cat <<EOF > ~/.config/guix/channels.scm
 (map (lambda (chan)
         (if (guix-channel? chan)
@@ -60,7 +59,6 @@ cat <<EOF > ~/.config/guix/channels.scm
             chan))
     %default-channels)
 EOF
-cat ~/.config/guix/channels.scm
 BOOTSTRAP
 
 FROM debug_hook
