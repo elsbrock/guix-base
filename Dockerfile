@@ -55,7 +55,7 @@ cat <<EOF > ~/.config/guix/channels.scm
             (channel
             (inherit chan)
             (url "https://github.com/guix-mirror/guix.git")
-            (commit ""))
+            (commit "\$VERSION"))
             chan))
     %default-channels)
 EOF
