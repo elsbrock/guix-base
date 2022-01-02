@@ -73,7 +73,6 @@ exec proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/g
     . $GUIX_PROFILE/etc/profile
     guix-daemon --disable-chroot &
     pid=$!
-    guix channel update guix v1.2.0
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
     kill $pid && wait $pid
 SCRIPT
