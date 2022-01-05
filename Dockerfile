@@ -74,7 +74,7 @@ exec proot -b guix/gnu:/gnu -b guix/var:/var -b /proc -b /dev -b guix/etc:/etc/g
     guix-daemon --disable-chroot &
     pid=$!
     guix archive --authorize < $GUIX_PROFILE/share/guix/ci.guix.gnu.org.pub && guix pull
-    kill $pid && wait $pid
+    kill $pid && wait || true
 SCRIPT
 SETUP
 
@@ -96,7 +96,7 @@ guix pack --format=docker --root=pack.tgz $@
 test -f pack.tgz && cat pack.tgz >&6
 # we ignore the exit code of the daemon here since the
 # previous commands succeeded
-kill $pid && wait -n
+kill $pid && wait || true
 ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
