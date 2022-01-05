@@ -94,7 +94,9 @@ guix-daemon --disable-chroot &
 pid=$!
 guix pack --format=docker --root=pack.tgz $@
 test -f pack.tgz && cat pack.tgz >&6
-kill $pid && wait $pid
+# we ignore the exit code of the daemon here since the
+# previous commands succeeded
+kill $pid && wait -n
 ENTRY
 
 RUN chmod +x /usr/bin/entrypoint.sh
