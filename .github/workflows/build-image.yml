@@ -36,7 +36,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Login to the Container registry
-        uses: docker/login-action@70e1ff84cbd75a9e03941a79f21f05f1b03a71bb
+        uses: docker/login-action@7c79b598eaa33458e78e8d0d71e0a9c217dd92af
         if: ${{ github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
