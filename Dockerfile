@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3-labs
-FROM debian@sha256:b42494c466d101bf06038e959e2e5acd227e1251987e79528e7d8b1f4040deaf AS debug_hook
+FROM debian@sha256:87eefc7c15610cca61db5c0fd280911c6a737c0680d807432c0bd80cd0cca39b AS debug_hook
 
 ENV DEBIAN_FRONTEND=noninteractive
 
