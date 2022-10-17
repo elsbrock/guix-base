@@ -18,7 +18,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@d00b20e38f3a2ec65ea14a534b9d110692edc08a
+        uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
         with:
           images: ghcr.io/elsbrock/guix-base
           tags: |
